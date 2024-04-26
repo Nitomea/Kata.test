@@ -7,81 +7,80 @@ import (
 	"strconv"
 	"strings"
 )
-
-var roman = map[string]int{
-	"C":    100,
-	"XC":   90,
-	"L":    50,
-	"XL":   40,
-	"X":    10,
-	"IX":   9,
-	"VIII": 8,
-	"VII":  7,
-	"VI":   6,
-	"V":    5,
-	"IV":   4,
-	"III":  3,
-	"II":   2,
-	"I":    1,
-}
-var convIntToRoman = [14]int{
-	100,
-	90,
-	50,
-	40,
-	10,
-	9,
-	8,
-	7,
-	6,
-	5,
-	4,
-	3,
-	2,
-	1,
-}
-var a, b *int
-var operators = map[string]func() int{
-	"+": func() int { return *a + *b },
-	"-": func() int { return *a - *b },
-	"/": func() int { return *a / *b },
-	"*": func() int { return *a * *b },
-}
-var data []string
-
-const (
-	LOW = "Вывод ошибки, так как строка " +
+func main() {
+	var roman = map[string]int{
+		"C":    100,
+		"XC":   90,
+		"L":    50,
+		"XL":   40,
+		"X":    10,
+		"IX":   9,
+		"VIII": 8,
+		"VII":  7,
+		"VI":   6,
+		"V":    5,
+		"IV":   4,
+		"III":  3,
+		"II":   2,
+		"I":    1,
+	}
+	var convIntToRoman = [14]int{
+		100,
+		90,
+		50,
+		40,
+		10,
+		9,
+		8,
+		7,
+		6,
+		5,
+		4,
+		3,
+		2,
+		1,
+	}
+	var a, b *int
+	var operators = map[string]func() int{
+		"+": func() int { return *a + *b },
+		"-": func() int { return *a - *b },
+		"/": func() int { return *a / *b },
+		"*": func() int { return *a * *b },
+	}
+	var data []string
+	const (
+		LOW = "Вывод ошибки, так как строка " +
 		"не является математической операцией."
-	HIGH = "Вывод ошибки, так как формат математической операции " +
+		HIGH = "Вывод ошибки, так как формат математической операции " +
 		"не удовлетворяет заданию — два операнда и один оператор (+, -, /, *)."
-	SCALE = "Вывод ошибки, так как используются " +
+		SCALE = "Вывод ошибки, так как используются " +
 		"одновременно разные системы счисления."
-	DIV = "Вывод ошибки, так как в римской системе " +
+		DIV = "Вывод ошибки, так как в римской системе " +
 		"нет отрицательных чисел."
-	ZERO  = "Вывод ошибки, так как в римской системе нет числа 0."
-	RANGE = "Калькулятор умеет работать только с арабскими целыми " +
+		ZERO  = "Вывод ошибки, так как в римской системе нет числа 0."
+		RANGE = "Калькулятор умеет работать только с арабскими целыми " +
 		"числами или римскими цифрами от 1 до 10 включительно"
-)
-
-func base(s string) {
-	var operator string
-	var stringsFound int
-	numbers := make([]int, 0)
-	romans := make([]string, 0)
-	romansToInt := make([]int, 0)
-	for idx := range operators {
-		for _, val := range s {
+	)
+	func base (s string) {
+		var operator string
+		var stringsFound int
+		numbers := make([]int, 0)
+		romans := make([]string, 0)
+		romansToInt := make([]int, 0)
+		for idx := range operators {
+			for _, val := range s {
 			if idx == string(val) {
 				operator += idx
 				data = strings.Split(s, operator)
 			}
 		}
 	}
+	
 	switch {
-	case len(operator) > 1:
-		panic(HIGH)
-	case len(operator) < 1:
-		panic(LOW)
+		case len(operator) > 1:
+			panic(HIGH)
+		case len(operator) < 1:
+			panic(LOW)
 	}
 	for _, elem := range data {
 		num, err := strconv.Atoi(elem)
@@ -92,7 +91,6 @@ func base(s string) {
 			numbers = append(numbers, num)
 		}
 	}
-
 	switch stringsFound {
 	case 1:
 		panic(SCALE)
@@ -118,34 +116,36 @@ func base(s string) {
 			intToRoman(val())
 		}
 	}
-}
-func intToRoman(romanResult int) {
-	var romanNum string
-	if romanResult == 0 {
-		panic(ZERO)
-	} else if romanResult < 0 {
-		panic(DIV)
-	}
-	for romanResult > 0 {
-		for _, elem := range convIntToRoman {
-			for i := elem; i <= romanResult; {
-				for index, value := range roman {
-					if value == elem {
-						romanNum += index
-						romanResult -= elem
+	func intToRoman(romanResult int) {
+		var romanNum string
+		if romanResult == 0 {
+			panic(ZERO)
+			} else if romanResult < 0 {
+				panic(DIV)
+			}
+			for romanResult > 0 {
+				for _, elem := range convIntToRoman {
+					for i := elem; i <= romanResult; {
+						for index, value := range roman {
+							if value == elem {
+								romanNum += index
+								romanResult -= elem
+							}
+						}
 					}
 				}
 			}
+			fmt.Println(romanNum)
+		}
+		func Start() {
+			fmt.Println("Welcome to kata-calculator")
+			reader := bufio.NewReader(os.Stdin)
+			for {
+				console, _ := reader.ReadString('\n')
+				s := strings.ReplaceAll(console, " ", "")
+				base(strings.ToUpper(strings.TrimSpace(s)))
+			}
 		}
 	}
-	fmt.Println(romanNum)
 }
-func Start() {
-	fmt.Println("Welcome to kata-calculator")
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		console, _ := reader.ReadString('\n')
-		s := strings.ReplaceAll(console, " ", "")
-		base(strings.ToUpper(strings.TrimSpace(s)))
-	}
-}
+
