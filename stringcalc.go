@@ -37,6 +37,19 @@ func main() {
 		}
 	}
 
+	if len(exp) > 10 {
+		fmt.Println("Вводная строка не должна быть длиннее 10 символов")
+		return
+	}
+
+	for _, datum := range data {
+		number, err := strconv.Atoi(datum)
+		if err != nil || number < 1 || number > 10 {
+			fmt.Println("Числа должны быть от 1 до 10 включительно")
+			return
+		}
+	}
+
 	for i := range data {
 		data[i] = strings.ReplaceAll(data[i], "\"", "")
 	}
