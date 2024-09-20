@@ -1,5 +1,4 @@
 package main
-
 import (
 	"bufio"
 	"fmt"
@@ -7,7 +6,6 @@ import (
 	"strconv"
 	"strings"
 )
-
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
@@ -16,7 +14,6 @@ func main() {
 		base(strings.ToUpper(strings.TrimSpace(s)))
 	}
 }
-
 var roman = map[string]int{
 	"C":    100,
 	"XC":   90,
@@ -57,7 +54,6 @@ var operators = map[string]func() int{
 	"*": func() int { return *a * *b },
 }
 var data []string
-
 const (
 	LOW = "Вывод ошибки, так как строка " +
 		"не является математической операцией."
@@ -71,7 +67,6 @@ const (
 	RANGE = "Калькулятор умеет работать только с арабскими целыми " +
 		"числами или римскими цифрами от 1 до 10 включительно"
 )
-
 func base(s string) {
 	var operator string
 	var stringsFound int
